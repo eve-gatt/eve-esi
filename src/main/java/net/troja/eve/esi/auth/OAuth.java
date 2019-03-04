@@ -86,7 +86,7 @@ public class OAuth implements Authentication {
      * details:
      * https://github.com/ccpgames/eveonline-third-party-documentation/blob
      * /master/docs/sso/jwt-validation.md
-     * 
+     *
      * @return Unverified JWT or null
      */
     public JWT getJWT() {
@@ -116,18 +116,14 @@ public class OAuth implements Authentication {
 
     private AccessTokenData getAccessTokenData() {
         // Check if we need a new access token
-        synchronized (OAuth.class) { // This block is synchronized across all
-                                     // threads - so we don't update the access
-                                     // token more than once
-            AccessTokenData accessTokenData = ACCESS_TOKEN_CACHE.get(getAuthKey());
-            if (refreshToken != null
-                    && (accessTokenData == null || accessTokenData.getValidUntil() < System.currentTimeMillis())) {
-                try {
-                    refreshToken();
-                } catch (final ApiException ex) {
-                    // This error will be handled by ESI once the request is
-                    // made
-                }
+        AccessTokenData accessTokenData = ACCESS_TOKEN_CACHE.get(getAuthKey());
+        if (refreshToken != null
+                && (accessTokenData == null || accessTokenData.getValidUntil() < System.currentTimeMillis())) {
+            try {
+                refreshToken();
+            } catch (final ApiException ex) {
+                // This error will be handled by ESI once the request is
+                // made
             }
         }
         return ACCESS_TOKEN_CACHE.get(getAuthKey());
