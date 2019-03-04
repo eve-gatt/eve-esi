@@ -207,6 +207,8 @@ public class OAuth implements Authentication {
         try {
             URL obj = new URL(URI_ACCESS_TOKEN);
             HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+            con.setConnectTimeout(10000);
+            con.setReadTimeout(10000);
 
             // add request header
             con.setRequestMethod("POST");
